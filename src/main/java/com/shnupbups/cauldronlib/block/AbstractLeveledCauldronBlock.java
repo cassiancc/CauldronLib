@@ -1,13 +1,10 @@
 package com.shnupbups.cauldronlib.block;
 
-import java.util.Map;
-
 import net.minecraft.block.AbstractCauldronBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.cauldron.CauldronBehavior;
-import net.minecraft.item.Item;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.util.math.BlockPos;
@@ -19,7 +16,7 @@ import com.shnupbups.cauldronlib.CauldronLib;
  * Represents a cauldron that has multiple fluid levels, like vanilla Water Cauldrons.
  */
 public abstract class AbstractLeveledCauldronBlock extends AbstractCauldronBlock {
-	public AbstractLeveledCauldronBlock(Settings settings, Map<Item, CauldronBehavior> behaviorMap) {
+	public AbstractLeveledCauldronBlock(Settings settings, CauldronBehavior.CauldronBehaviorMap behaviorMap) {
 		super(settings, behaviorMap);
 		this.setDefaultState(this.stateManager.getDefaultState().with(getLevelProperty(), 1));
 		CauldronLib.registerBehaviorMap(behaviorMap);

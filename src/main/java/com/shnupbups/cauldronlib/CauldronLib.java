@@ -20,6 +20,7 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.ItemActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
@@ -28,7 +29,7 @@ import com.shnupbups.cauldronlib.block.AbstractLeveledCauldronBlock;
 import com.shnupbups.cauldronlib.block.FullCauldronBlock;
 
 public class CauldronLib {
-	private static final Set<Map<Item, CauldronBehavior>> CAULDRON_BEHAVIOR_MAPS = new HashSet<>(Set.of(
+	private static final Set<CauldronBehavior.CauldronBehaviorMap> CAULDRON_BEHAVIOR_MAPS = new HashSet<>(Set.of(
 			CauldronBehavior.EMPTY_CAULDRON_BEHAVIOR,
 			CauldronBehavior.WATER_CAULDRON_BEHAVIOR,
 			CauldronBehavior.LAVA_CAULDRON_BEHAVIOR,
@@ -44,7 +45,7 @@ public class CauldronLib {
 	 *
 	 * @param behaviorMap the behavior map to register
 	 */
-	public static void registerBehaviorMap(Map<Item, CauldronBehavior> behaviorMap) {
+	public static void registerBehaviorMap(CauldronBehavior.CauldronBehaviorMap behaviorMap) {
 		CAULDRON_BEHAVIOR_MAPS.add(behaviorMap);
 		addGlobalBehaviors(behaviorMap);
 	}
@@ -52,7 +53,7 @@ public class CauldronLib {
 	/**
 	 * Gets all registered cauldron behavior maps.
 	 */
-	public static Set<Map<Item, CauldronBehavior>> getCauldronBehaviorMaps() {
+	public static Set<CauldronBehavior.CauldronBehaviorMap> getCauldronBehaviorMaps() {
 		return CAULDRON_BEHAVIOR_MAPS;
 	}
 
@@ -68,10 +69,10 @@ public class CauldronLib {
 	 *
 	 * @param behaviorMap the behavior map to add to
 	 */
-	private static void addGlobalBehaviors(Map<Item, CauldronBehavior> behaviorMap) {
-		CauldronBehavior.registerBucketBehavior(behaviorMap);
+	private static void addGlobalBehaviors(CauldronBehavior.CauldronBehaviorMap behaviorMap) {
+		CauldronBehavior.registerBucketBehavior(behaviorMap.map());
 		getGlobalBehaviors().forEach((behavior) -> {
-			behaviorMap.put(behavior.item(), behavior.behavior());
+			behaviorMap.map().put(behavior.item(), behavior.behavior());
 		});
 	}
 
@@ -91,7 +92,7 @@ public class CauldronLib {
 	 */
 	public static void registerGlobalBehavior(CauldronBehaviorMapEntry... behaviors) {
 		Arrays.stream(behaviors).forEach((behavior -> {
-			getCauldronBehaviorMaps().forEach((map) -> map.put(behavior.item(), behavior.behavior));
+			getCauldronBehaviorMaps().forEach((map) -> map.map().put(behavior.item(), behavior.behavior));
 			getGlobalBehaviors().add(behavior);
 		}));
 	}
@@ -179,7 +180,7 @@ public class CauldronLib {
 				world.emitGameEvent(null, GameEvent.FLUID_PLACE, pos);
 			}
 
-			return ActionResult.success(world.isClient);
+			return ItemActionResult.success(world.isClient);
 		};
 	}
 
