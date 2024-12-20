@@ -20,7 +20,6 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.ItemActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
@@ -180,7 +179,7 @@ public class CauldronLib {
 				world.emitGameEvent(null, GameEvent.FLUID_PLACE, pos);
 			}
 
-			return ItemActionResult.success(world.isClient);
+			return ActionResult.SUCCESS;
 		};
 	}
 
